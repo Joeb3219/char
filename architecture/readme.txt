@@ -25,3 +25,22 @@ GENERAL OUTLINE:
 		-- Next 8 bits are either an immediate, or one/two regs
 	-- ADDRESS BUS							[16 bit]
 	-- COUNT BUS							[8 bit]
+-- INSTRUCTIONS
+	-- NOP:		0x00						[8 bit]
+	-- HALT:	0x01						[8 bit]
+	-- ALU FAMILY	(0x1x)
+		-- ADD:		0x10	rA, rB	(src, dst)		[16 bit]
+		-- SUB:		0x11	rA, rB	(src, dst)		[16 bit]
+		-- MUL:		0x12	rA, rB	(src, dst)		[16 bit]
+		-- AND:		0x13	rA, rB	(src, dst)		[16 bit]
+		-- OR:		0x14	rA, rB	(src, dst)		[16 bit]
+		-- XOR:		0x15	rA, rB	(src, dst)		[16 bit]
+		-- NOR:		0x16	rA, rB	(src, dst)		[16 bit]
+	-- MOVE FAMILY	(0x2x)
+		-- MVRR:	0x20	rA, rB	(src, dst)		[16 bit]
+		-- MVIR:	0x21	IMM	(IMM)			[16 bit]
+			-- Moves into general register A.
+		-- MVADH:	0x22	IMM	(IMM)			[16 bit]
+		-- MVADL:	0x23	IMM	(IMM)			[16 bit]
+		-- MVMR:	0x24	rA	(dst)			[12 bit?]
+		-- MVRM:	0x25	rA	(src)			[12 bit?]
