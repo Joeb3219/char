@@ -1,0 +1,27 @@
+GENERAL OUTLINE:
+
+-- REGISTERS
+	-- 4 general purpose registers (A, B, C, D).			[8 bit]
+	-- PROGRAM Register (inside of program counter)			[8 bit]
+	-- INSTRUCTION Register						[16 bit]
+		-- Splits into three pieces for most instructions
+		-- INSTRUCTION						[8 bit]
+		-- rA, rB						[8 bit, 8 bit]
+		-- IMMEDIATE						[8 bit]
+	-- TWO math registers (mA, mB)					[8 bit]
+	-- 
+-- ALU
+	-- mA & mB Registers constantly output to ALU.
+	-- All ALU components constantly compute on mA & mB.
+		-- Perhaps this needs to be revised (division by zero?)
+	-- Implementing subtraction and addition into same circuit
+		-- Convert mB to -mB if subtracting, then add mA+mB.
+	-- ALU operations:
+		-- ADD, SUB, MULT, AND, OR, XOR, NOR
+-- BUSSES
+	-- DATA BUS							[8 bit]
+	-- INSTRUCTION BUS						[16 bit]
+		-- First 8 bits are the instruction
+		-- Next 8 bits are either an immediate, or one/two regs
+	-- ADDRESS BUS							[16 bit]
+	-- COUNT BUS							[8 bit]
