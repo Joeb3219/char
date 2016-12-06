@@ -31,11 +31,10 @@ GENERAL OUTLINE:
 	-- ALU FAMILY	(0x1x)
 		-- ADD:		0x10	rA, rB	(src, dst)		[16 bit]
 		-- SUB:		0x11	rA, rB	(src, dst)		[16 bit]
-		-- MUL:		0x12	rA, rB	(src, dst)		[16 bit]
-		-- AND:		0x13	rA, rB	(src, dst)		[16 bit]
-		-- OR:		0x14	rA, rB	(src, dst)		[16 bit]
-		-- XOR:		0x15	rA, rB	(src, dst)		[16 bit]
-		-- NOR:		0x16	rA, rB	(src, dst)		[16 bit]
+		-- AND:		0x12	rA, rB	(src, dst)		[16 bit]
+		-- OR:		0x13	rA, rB	(src, dst)		[16 bit]
+		-- XOR:		0x14	rA, rB	(src, dst)		[16 bit]
+		-- NOR:		0x15	rA, rB	(src, dst)		[16 bit]
 	-- MOVE FAMILY	(0x2x)
 		-- MVRR:	0x20	rA, rB	(src, dst)		[16 bit]
 		-- MVIR:	0x21	IMM	(IMM)			[16 bit]
