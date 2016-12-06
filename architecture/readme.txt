@@ -1,14 +1,14 @@
 GENERAL OUTLINE:
 
 -- REGISTERS
-	-- 4 general purpose registers (A, B, C, D).			[8 bit]
-	-- PROGRAM Register (inside of program counter)			[8 bit]
-	-- INSTRUCTION Register						[16 bit]
+	-- 4 general purpose registers (A[0], B[1], C[2], D[3]).	[8 bit]
+	-- PROGRAM Register (inside of program counter)	[6]		[8 bit]
+	-- INSTRUCTION Register [7]					[16 bit]
 		-- Splits into three pieces for most instructions
 		-- INSTRUCTION						[8 bit]
 		-- rA, rB						[8 bit, 8 bit]
 		-- IMMEDIATE						[8 bit]
-	-- TWO math registers (mA, mB)					[8 bit]
+	-- TWO math registers (mA[4], mB[5])				[8 bit]
 	-- 
 -- ALU
 	-- mA & mB Registers constantly output to ALU.
@@ -25,20 +25,50 @@ GENERAL OUTLINE:
 		-- Next 8 bits are either an immediate, or one/two regs
 	-- ADDRESS BUS							[16 bit]
 	-- COUNT BUS							[8 bit]
+-- ROM
+	-- Three seperate ROM chips signify what to do at each T step.
+	-- There are several operations that we define by a given value	[8 bit]
+		of a ROM read
+	-- x00: Do nothing
+	-- x01: Halt
+	-- x02: READ: register indicated by first 4 bits of operand
+	-- x03: READ: register indicated by first 4 bits of operand
+	-- x04: WRITE: register indicated by first 4 bits of operand
+	-- x05: WRITE: register indicated by first 4 bits of operand
+	-- x06: READ, WRITE: WRITE reg @ first 4 bits, READ reg @ second 4 bits
+	-- x07: READ, WRITE: Write reg @ first 4 bits -> mA
+	-- x08: READ, WRITE: Write reg @ last 4 bits -> mB
+	-- x09: STORE: Move operand to rA
+	-- x0A: ADD -> reg @ last 4 bits
+	-- x0B: SUBTRACT -> reg @ last 4 bits
+	-- x0C: AND -> reg @ last 4 bits
+	-- x0D: OR -> reg @ last 4 bits
+	-- x0E: XOR -> reg @ last 4 bits
+	-- x0F: NOR -> reg @ last 4 bits
 -- INSTRUCTIONS
 	-- NOP:		0x00						[8 bit]
+		-- 00, 00, 00
 	-- HALT:	0x01						[8 bit]
+		-- 01, 00, 00
 	-- ALU FAMILY	(0x1x)
 		-- ADD:		0x10	rA, rB	(src, dst)		[16 bit]
+			-- 07, 08, 0A
 		-- SUB:		0x11	rA, rB	(src, dst)		[16 bit]
+			-- 07, 08, 0B
 		-- AND:		0x12	rA, rB	(src, dst)		[16 bit]
+			-- 07, 08, 0C
 		-- OR:		0x13	rA, rB	(src, dst)		[16 bit]
+			-- 07, 08, 0D
 		-- XOR:		0x14	rA, rB	(src, dst)		[16 bit]
+			-- 07, 08, 0E
 		-- NOR:		0x15	rA, rB	(src, dst)		[16 bit]
+			-- 07, 08, 0F
 	-- MOVE FAMILY	(0x2x)
 		-- MVRR:	0x20	rA, rB	(src, dst)		[16 bit]
+			-- 06, 00, 00
 		-- MVIR:	0x21	IMM	(IMM)			[16 bit]
 			-- Moves into general register A.
+			-- 09, 00, 00
 		-- MVADH:	0x22	IMM	(IMM)			[16 bit]
 		-- MVADL:	0x23	IMM	(IMM)			[16 bit]
 		-- MVMR:	0x24	rA	(dst)			[12 bit?]
