@@ -26,15 +26,18 @@ GENERAL OUTLINE:
 	-- ADDRESS BUS							[16 bit]
 	-- COUNT BUS							[8 bit]
 -- ROM
-	-- Three seperate ROM chips signify what to do at each T step.
+	-- Use a 256x16 ROM
+		-- 3 steps each get 5 bits, ergo 2^5 (32) possible
+			microcodes
+		-- Eliminates need for multiple ROM chips.
 	-- There are several operations that we define by a given value	[8 bit]
 		of a ROM read
 	-- x00: Do nothing
 	-- x01: Halt
 	-- x02: READ: register indicated by first 4 bits of operand
-	-- x03: READ: register indicated by first 4 bits of operand
+	-- x03: READ: register indicated by last 4 bits of operand
 	-- x04: WRITE: register indicated by first 4 bits of operand
-	-- x05: WRITE: register indicated by first 4 bits of operand
+	-- x05: WRITE: register indicated by last 4 bits of operand
 	-- x06: READ, WRITE: WRITE reg @ first 4 bits, READ reg @ second 4 bits
 	-- x07: READ, WRITE: Write reg @ first 4 bits -> mA
 	-- x08: READ, WRITE: Write reg @ last 4 bits -> mB
@@ -47,28 +50,28 @@ GENERAL OUTLINE:
 	-- x0F: NOR -> reg @ last 4 bits
 -- INSTRUCTIONS
 	-- NOP:		0x00						[8 bit]
-		-- 00, 00, 00
+		-- 00, 00, 00	[0000]
 	-- HALT:	0x01						[8 bit]
-		-- 01, 00, 00
+		-- 01, 00, 00	[0800]
 	-- ALU FAMILY	(0x1x)
 		-- ADD:		0x10	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0A
+			-- 07, 08, 0A	[1D0A]
 		-- SUB:		0x11	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0B
+			-- 07, 08, 0B	[1D0B]
 		-- AND:		0x12	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0C
+			-- 07, 08, 0C	[1D0C]
 		-- OR:		0x13	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0D
+			-- 07, 08, 0D	[1D0D]
 		-- XOR:		0x14	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0E
+			-- 07, 08, 0E	[1D0E]
 		-- NOR:		0x15	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0F
+			-- 07, 08, 0F	[1D0F]
 	-- MOVE FAMILY	(0x2x)
 		-- MVRR:	0x20	rA, rB	(src, dst)		[16 bit]
-			-- 06, 00, 00
+			-- 06, 00, 00	[3000]
 		-- MVIR:	0x21	IMM	(IMM)			[16 bit]
 			-- Moves into general register A.
-			-- 09, 00, 00
+			-- 09, 00, 00	[4800]
 		-- MVADH:	0x22	IMM	(IMM)			[16 bit]
 		-- MVADL:	0x23	IMM	(IMM)			[16 bit]
 		-- MVMR:	0x24	rA	(dst)			[12 bit?]
