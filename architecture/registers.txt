@@ -1,0 +1,12 @@
++====+==========+===============================================================+
++ ID +   NAME   +			DESC					+
++====+==========+===============================================================+
++ 00 +	NO REG  + 			NULL REGISTER				+
++ 01 +  rA      +			GENERAL REGISTER			+
++ 02 +  rB      +			GENERAL REGISTER			+
++ 03 +  rC      +			GENERAL REGISTER			+
++ 04 +  rD      +			GENERAL REGISTER			+
++ 05 +  INSTR   +			INSTRUCTION REGISTER			+
++ 06 +  adH      +			HIGH 8 BITS OF ADDRESS			+
++ 07 +  adL      +			LOW 8 BITS OF ADDRESS			+
++====+==========+===============================================================+
