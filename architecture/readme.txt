@@ -32,22 +32,22 @@ GENERAL OUTLINE:
 		-- Eliminates need for multiple ROM chips.
 	-- There are several operations that we define by a given value	[8 bit]
 		of a ROM read
-	-- x00: Do nothing
-	-- x01: Halt
-	-- x02: READ: register indicated by first 4 bits of operand
-	-- x03: READ: register indicated by last 4 bits of operand
-	-- x04: WRITE: register indicated by first 4 bits of operand
-	-- x05: WRITE: register indicated by last 4 bits of operand
-	-- x06: READ, WRITE: WRITE reg @ first 4 bits, READ reg @ second 4 bits
-	-- x07: READ, WRITE: Write reg @ first 4 bits -> mA
-	-- x08: READ, WRITE: Write reg @ last 4 bits -> mB
-	-- x09: STORE: Move operand to rA
-	-- x0A: ADD -> reg @ last 4 bits
-	-- x0B: SUBTRACT -> reg @ last 4 bits
-	-- x0C: AND -> reg @ last 4 bits
-	-- x0D: OR -> reg @ last 4 bits
-	-- x0E: XOR -> reg @ last 4 bits
-	-- x0F: NOR -> reg @ last 4 bits
+00000	-- x00: Do nothing
+00001	-- x01: Halt
+00010	-- x02: READ: register indicated by first 4 bits of operand
+00011	-- x03: READ: register indicated by last 4 bits of operand
+00100	-- x04: WRITE: register indicated by first 4 bits of operand
+00101	-- x05: WRITE: register indicated by last 4 bits of operand
+00110	-- x06: READ, WRITE: WRITE reg @ first 4 bits, READ reg @ second 4 bits
+00111	-- x07: READ, WRITE: Write reg @ first 4 bits -> mA
+01000	-- x08: READ, WRITE: Write reg @ last 4 bits -> mB
+01001	-- x09: STORE: Move operand to rA
+01010	-- x0A: ADD -> reg @ last 4 bits
+01011	-- x0B: SUBTRACT -> reg @ last 4 bits
+01100	-- x0C: AND -> reg @ last 4 bits
+01101	-- x0D: OR -> reg @ last 4 bits
+01110	-- x0E: XOR -> reg @ last 4 bits
+01111	-- x0F: NOR -> reg @ last 4 bits
 -- INSTRUCTIONS
 	-- NOP:		0x00						[8 bit]
 		-- 00, 00, 00	[0000]
