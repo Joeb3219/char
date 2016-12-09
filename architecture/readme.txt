@@ -55,7 +55,7 @@ GENERAL OUTLINE:
 		-- 01, 00, 00	[0800]
 	-- ALU FAMILY	(0x1x)
 		-- ADD:		0x10	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0A	[1D0A]
+			-- 07, 08, 0A	[3A14]
 		-- SUB:		0x11	rA, rB	(src, dst)		[16 bit]
 			-- 07, 08, 0B	[1D0B]
 		-- AND:		0x12	rA, rB	(src, dst)		[16 bit]
