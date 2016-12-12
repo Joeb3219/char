@@ -4,7 +4,6 @@
 #include "futil.h"
 #include "cpu.h"
 #include "emul.h"
-#include "rom.h"
 
 int main(int argc, char **argv){
 	int i;
@@ -25,20 +24,12 @@ int main(int argc, char **argv){
 		error(0, "File not specified.\nUsage: emul -file <filename>\nOther arguments: -clock <clockSpeed>, default: unspecified\n");
 	}
 
-	if(getFile(fileName) == 0){
-		error(0, "File not found\n");
-	}
-
 	printf("===\tFILE: %s\t===\n",fileName);
 	printf("===\tBEGIN PRGM\t\t\t===\n");
 
-	Rom *rom_tcodes = loadROM(getFile(tcodes), 256);
-
 	initialize();
 
-	runCPU(parseClockSpeed(clockString));
-
-	free(rom_tcodes);
+	runCPU(getFile(fileName), getFile(tcodes), parseClockSpeed(clockString));
 
 	return 0;
 }

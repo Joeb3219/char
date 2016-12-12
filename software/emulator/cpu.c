@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "rom.h"
 #include "cpu.h"
 #include "alu.h"
+
 #define add() tick_ALU(registers[REG_MA], registers[REG_MB], registers[REG_ALU], 1)
 #define sub() tick_ALU(registers[REG_MA], registers[REG_MB], registers[REG_ALU], 2)
 #define and() tick_ALU(registers[REG_MA], registers[REG_MB], registers[REG_ALU], 3)
@@ -35,14 +37,34 @@ void initialize(){
 		registers[i]->aluRW = registers[i]->dataRW = registers[i]->val = 0;
 	}
 	registers[REG_MA]->aluRW = registers[REG_MB]->aluRW = REGISTER_WRITE;
-	registers[REG_ALU]->dataRW = REGISTER_WRITE;
-	registers[REG_MA]->val = registers[REG_MB]->val = 1;
-	registers[REG_MA]->dataRW = REGISTER_READ;
+	registers[REG_ALU]->dataRW = 0;
 }
 
-void runCPU(int clockSpeed){
+byte getCurrentTcode(double_byte *count, byte *tcodeCount, Rom *tcodes, Rom *program){
+	double_byte instr;
+	*tcodeCount ++;
+	if(*tcodeCount == 3) *count ++;
+	readROM(program, *count);
+	return 0;
+}
+
+void runCPU(FILE *program, FILE *tcodes, int clockSpeed){
+	double_byte count = 0;
+	byte tcodeCount = 0, tInstr;
+	Rom *rom_program, *rom_tcodes;
+
+	rom_program = loadROM(program, 256);
+	rom_tcodes = loadROM(tcodes, 256);
+
+	fclose(program);
+	fclose(tcodes);
+
 	while(status != STATUS_HLT){
+		tInstr = getCurrentTcode(&count, &tcodeCount, rom_tcodes, rom_program);
 		readWriteCycle();
 		status = STATUS_HLT;
 	}
+
+	free(rom_program);
+	free(rom_tcodes);
 }
