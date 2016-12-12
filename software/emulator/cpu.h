@@ -22,6 +22,9 @@
 #define REGISTER_READ 1
 #define REGISTER_WRITE 2
 
+#define CLEANUP_FALSE 0
+#define CLEANUP_TRUE 1
+
 #define DEFAULT_CLOCKSPEED 1000
 
 extern int dataBus, instrBus, cntrlBus, status;
