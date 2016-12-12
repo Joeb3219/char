@@ -4,10 +4,13 @@
 #include "futil.h"
 #include "cpu.h"
 #include "emul.h"
+#include "rom.h"
 
 int main(int argc, char **argv){
 	int i;
-	char *fileName, *clockString;
+	char *fileName, *clockString, *tcodes;
+	tcodes = "../rom/tcodes";
+	clockString = "default";
 
 	printf("===\tCHAR EMULATOR\t\t\t===\n");
 	printf("===\tDEBUGGING INFO\t\t\t===\n");
@@ -29,11 +32,13 @@ int main(int argc, char **argv){
 	printf("===\tFILE: %s\t===\n",fileName);
 	printf("===\tBEGIN PRGM\t\t\t===\n");
 
+	Rom *rom_tcodes = loadROM(getFile(tcodes), 256);
+
 	initialize();
 
 	runCPU(parseClockSpeed(clockString));
 
-	readWriteCycle();
+	free(rom_tcodes);
 
 	return 0;
 }

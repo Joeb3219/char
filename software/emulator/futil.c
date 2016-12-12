@@ -38,7 +38,7 @@ void append(char *str, char c){
 }
 
 int parseClockSpeed(char *str){
-	if(str == 0) return DEFAULT_CLOCKSPEED;
+	if(str == 0 || strcmp(str, "default") == 0) return DEFAULT_CLOCKSPEED;
 	if(strcmp(str, "manual") == 0) return -1;
 	return 1;
 }

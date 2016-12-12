@@ -43,6 +43,6 @@ void initialize(){
 void runCPU(int clockSpeed){
 	while(status != STATUS_HLT){
 		readWriteCycle();
-		sub();
+		status = STATUS_HLT;
 	}
 }

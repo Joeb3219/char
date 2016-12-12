@@ -27,6 +27,7 @@
 extern int dataBus, instrBus, cntrlBus, status;
 
 typedef unsigned char byte;
+typedef unsigned short double_byte;
 
 typedef enum opcode{
 	NOP = 0x00, HALT = 0x01,
