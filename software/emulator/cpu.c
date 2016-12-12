@@ -40,16 +40,20 @@ void initialize(){
 	registers[REG_ALU]->dataRW = 0;
 }
 
-byte getCurrentTcode(double_byte *count, byte *tcodeCount, Rom *tcodes, Rom *program){
-	double_byte instr;
-	*tcodeCount ++;
-	if(*tcodeCount == 3) *count ++;
-	readROM(program, *count);
-	return 0;
+byte getCurrentTcode(double_byte *count, byte *tcodeCount, Rom *tcodes, Rom *program, double_byte *instr){
+	double_byte tcode;
+	*instr = readROM(program, *count);
+	tcode = (readROM(tcodes, (int) ((*instr) & 0xFF00) >> 8));
+	if(*tcodeCount == 0) tcode = ((tcode & 0xF800) >> 11);	// LEFT 5 BITS: 1111 1000 0000 0000, >> 11
+	else if(*tcodeCount == 1) tcode = ((tcode & 0x07A0) >> 6);	// NEXT 5 BITS: 0000 0111 1100 0000
+	else tcode = ((tcode & 0x002D) >> 1);	// LAST 5 BITS: 0000 0000 0011 1110
+	(*tcodeCount) ++;
+	if(*tcodeCount == 3) ((*count) ++);
+	return (byte) tcode;
 }
 
 void runCPU(FILE *program, FILE *tcodes, int clockSpeed){
-	double_byte count = 0;
+	double_byte count = 0, instr = 0;
 	byte tcodeCount = 0, tInstr;
 	Rom *rom_program, *rom_tcodes;
 
@@ -60,7 +64,8 @@ void runCPU(FILE *program, FILE *tcodes, int clockSpeed){
 	fclose(tcodes);
 
 	while(status != STATUS_HLT){
-		tInstr = getCurrentTcode(&count, &tcodeCount, rom_tcodes, rom_program);
+		tInstr = getCurrentTcode(&count, &tcodeCount, rom_tcodes, rom_program, &instr);
+		printf("CURRENT INSTR: %0X, TCODE: %0X\n", instr, tInstr);
 		readWriteCycle();
 		status = STATUS_HLT;
 	}
