@@ -145,7 +145,7 @@ byte getCurrentTcode(double_byte *count, byte *tcodeCount, Rom *tcodes_1, Rom *t
 
 	if(*tcodeCount == 2) tcode = ((tcode & 0xF000) >> 12);
 	else if(*tcodeCount == 3) tcode = ((tcode & 0x0F00) >> 8);
-	else tcode = ((tcode & 0x00F0) >> 4);
+	else if(*tcodeCount == 4) tcode = ((tcode & 0x00F0) >> 4);
 	(*tcodeCount) ++;
 	if((*tcodeCount) == 5){
 		((*count) += 2);
