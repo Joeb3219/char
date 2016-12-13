@@ -7,8 +7,9 @@
 
 int main(int argc, char **argv){
 	int i;
-	char *fileName, *clockString, *tcodes;
-	tcodes = "../rom/tcodes";
+	char *fileName, *clockString, *tcodes_1, *tcodes_2;
+	tcodes_1 = "../rom/tcodes_1";
+	tcodes_2 = "../rom/tcodes_2";
 	clockString = "default";
 
 	printf("===\tCHAR EMULATOR\t\t\t===\n");
@@ -29,7 +30,7 @@ int main(int argc, char **argv){
 
 	initialize();
 
-	runCPU(getFile(fileName), getFile(tcodes), parseClockSpeed(clockString));
+	runCPU(getFile(fileName), getFile(tcodes_1), getFile(tcodes_2), parseClockSpeed(clockString));
 
 	return 0;
 }

@@ -133,36 +133,45 @@ void initialize(){
 	registers[REG_ALU]->dataRW = 0;
 }
 
-byte getCurrentTcode(double_byte *count, byte *tcodeCount, Rom *tcodes, Rom *program, double_byte *instr){
+byte getCurrentTcode(double_byte *count, byte *tcodeCount, Rom *tcodes_1, Rom *tcodes_2, Rom *program, double_byte *instr){
 	double_byte tcode;
-	*instr = readROM(program, *count);
-	tcode = (readROM(tcodes, (int) ((*instr) & 0xFF00) >> 8));
-	if(*tcodeCount == 0) tcode = ((tcode & 0xF800) >> 11);	// LEFT 5 BITS: 1111 1000 0000 0000, >> 11
-	else if(*tcodeCount == 1) tcode = ((tcode & 0x07A0) >> 6);	// NEXT 5 BITS: 0000 0111 1100 0000
-	else tcode = ((tcode & 0x003E) >> 1);	// LAST 5 BITS: 0000 0000 0011 1110
+	if((*tcodeCount) <= 1){
+		if((*tcodeCount) == 0) ((*instr) = (readROM(program, *count) << 8));
+		else ((*instr) |= readROM(program, (*count) + 1));
+	}else{
+		tcode = (readROM(tcodes_1, (int) ((*instr) & 0xFF00) >> 8)) << 8;
+	        tcode |= (readROM(tcodes_2, (int) ((*instr) & 0xFF00) >> 8));
+	}
+
+	if(*tcodeCount == 2) tcode = ((tcode & 0xF000) >> 12);
+	else if(*tcodeCount == 3) tcode = ((tcode & 0x0F00) >> 8);
+	else tcode = ((tcode & 0x00F0) >> 4);
 	(*tcodeCount) ++;
-	if((*tcodeCount) == 3){
-		((*count) ++);
+	if((*tcodeCount) == 5){
+		((*count) += 2);
 		(*tcodeCount) = 0;
 	}
 	return (byte) tcode;
 }
 
-void runCPU(FILE *program, FILE *tcodes, int clockSpeed){
+void runCPU(FILE *program, FILE *tcodes_1, FILE *tcodes_2, int clockSpeed){
 	double_byte count = 0, instr = 0;
 	byte tcodeCount = 0, tInstr, operands;
-	Rom *rom_program, *rom_tcodes;
+	Rom *rom_program, *rom_tcodes_1, *rom_tcodes_2;
 
 	rom_program = loadROM(program, 256);
-	rom_tcodes = loadROM(tcodes, 256);
+	rom_tcodes_1 = loadROM(tcodes_1, 256);
+	rom_tcodes_2 = loadROM(tcodes_2, 256);
 
 	fclose(program);
-	fclose(tcodes);
+	fclose(tcodes_1);
+	fclose(tcodes_2);
 
 	while(status == STATUS_AOK){
-		tInstr = getCurrentTcode(&count, &tcodeCount, rom_tcodes, rom_program, &instr);
+		tInstr = getCurrentTcode(&count, &tcodeCount, rom_tcodes_1, rom_tcodes_2, rom_program, &instr);
 		if(tInstr == 0) continue;
 		operands = (instr & 0x00FF);
+		if(tcodeCount <= 1) continue;
 		printf("CURRENT INSTR: %0X (%0X), TCODE: %0X\n", instr, operands, tInstr);
 		microcodes[tInstr](operands, CLEANUP_FALSE);
 		readWriteCycle();
@@ -171,5 +180,6 @@ void runCPU(FILE *program, FILE *tcodes, int clockSpeed){
 	}
 
 	free(rom_program);
-	free(rom_tcodes);
+	free(rom_tcodes_1);
+	free(rom_tcodes_2);
 }

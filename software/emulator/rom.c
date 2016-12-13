@@ -3,24 +3,24 @@
 #include "rom.h"
 #include "futil.h"
 
-#define DATA_WIDTH 4
-
-Rom* loadROM(FILE *file, int dataSize){
+Rom* loadROM(FILE *file, int size){
 	if(file == 0){
 		error(0, "Nonexistant file loaded by ROM\n");
 	}
 	int i = 0, j = 0, commentStarted = 0;
-	char c, buffer[5];
+	char c, buffer[3];
 	Rom *rom = malloc(sizeof(Rom));
-	rom->dataSize = dataSize;
-	rom->data = calloc(dataSize, sizeof(double_byte));
+	rom->dataSize = size;
+	rom->data = calloc(size, sizeof(byte));
 	while( (c = fgetc(file)) != EOF){
 		if(c == '#') commentStarted = 1;
-		if(c == '\n' || j == 4){
-			buffer[j] = '\0';
-			rom->data[i] = (double_byte) strtol(buffer, NULL, 16);
+		if(c == '\n' || j == 2){
+			if(j == 2){
+				buffer[j] = '\0';
+				rom->data[i] = (byte) strtol(buffer, NULL, 16);
+				i ++;
+			}
 			j = 0;
-			i ++;
 			commentStarted = 0;
 		}else if(c != ' ' && commentStarted != 1){
 			buffer[j] = c;
@@ -31,7 +31,19 @@ Rom* loadROM(FILE *file, int dataSize){
 	return rom;
 }
 
-double_byte readROM(Rom *rom, int address){
-	if(address < 0 || address > rom->dataSize) error(0, "ATTEMPTING TO ACCESS ROM ADDRESS OUT OF BOUNDS\n");
+byte readROM(Rom *rom, int address){
+	if(address < 0 || address > rom->dataSize){
+		error(0, "ATTEMPTING TO ACCESS ROM ADDRESS OUT OF BOUNDS\n");
+	}
 	return rom->data[address];
+}
+
+void printROM(Rom *rom){
+	int i = 0;
+	for(i = 0; i < rom->dataSize; i ++){
+		if(i % 8 == 0) printf("%40x: ", i);
+		printf("[%02X]", readROM(rom, i));
+		if((i + 1) % 8 == 0) printf("\n");
+	}
+	printf("\n");
 }

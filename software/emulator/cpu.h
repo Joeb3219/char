@@ -44,7 +44,7 @@ typedef struct Register{
 } reg;
 
 void initialize();
-void runCPU(FILE *program, FILE *tcodes, int clockSpeed);
+void runCPU(FILE *program, FILE *tcodes_1, FILE *tcodes_2, int clockSpeed);
 void readWriteCycle();
 
 #endif

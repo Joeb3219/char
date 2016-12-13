@@ -1,14 +1,15 @@
 #ifndef _ROM_H_
 #define _ROM_H_
 
-typedef unsigned short double_byte;
+typedef unsigned char byte;
 
 typedef struct Rom{
 	int dataSize;
-	double_byte *data;
+	byte *data;
 } Rom;
 
-Rom* loadROM(FILE *file, int dataSize);
-double_byte readROM(Rom *rom, int address);
+Rom* loadROM(FILE *file, int size);
+byte readROM(Rom *rom, int address);
+void printROM(Rom *rom);
 
 #endif
