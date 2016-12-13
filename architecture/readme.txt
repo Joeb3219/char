@@ -26,10 +26,11 @@ GENERAL OUTLINE:
 	-- ADDRESS BUS							[16 bit]
 	-- COUNT BUS							[8 bit]
 -- ROM
-	-- Use a 256x16 ROM
-		-- 3 steps each get 5 bits, ergo 2^5 (32) possible
+	-- Use a 2 256x8 ROM chips
+		-- 3 steps each get 4 bits, ergo 2^4 (16) possible
 			microcodes
-		-- Eliminates need for multiple ROM chips.
+		-- Tcodes 1 & 2 stored on chip 1, Tcode 3 on chip 2
+		-- Possible expansion to a 4th Tcode for bigger instructions
 	-- There are several operations that we define by a given value	[8 bit]
 		of a ROM read
 00000	-- x00: Do nothing
@@ -50,28 +51,28 @@ GENERAL OUTLINE:
 01111	-- x0F: NOR -> reg @ last 4 bits
 -- INSTRUCTIONS
 	-- NOP:		0x00						[8 bit]
-		-- 00, 00, 00	[0000]
+		-- 00, 00, 00	[000]
 	-- HALT:	0x01						[8 bit]
-		-- 01, 00, 00	[0800]
+		-- 01, 00, 00	[100]
 	-- ALU FAMILY	(0x1x)
 		-- ADD:		0x10	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0A	[3A14]
+			-- 07, 08, 0A	[78A]
 		-- SUB:		0x11	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0B	[1D0B]
+			-- 07, 08, 0B	[78B]
 		-- AND:		0x12	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0C	[1D0C]
+			-- 07, 08, 0C	[78C]
 		-- OR:		0x13	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0D	[1D0D]
+			-- 07, 08, 0D	[78D]
 		-- XOR:		0x14	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0E	[1D0E]
+			-- 07, 08, 0E	[78E]
 		-- NOR:		0x15	rA, rB	(src, dst)		[16 bit]
-			-- 07, 08, 0F	[1D0F]
+			-- 07, 08, 0F	[78F]
 	-- MOVE FAMILY	(0x2x)
 		-- MVRR:	0x20	rA, rB	(src, dst)		[16 bit]
-			-- 06, 00, 00	[3000]
+			-- 06, 00, 00	[600]
 		-- MVIR:	0x21	IMM	(IMM)			[16 bit]
 			-- Moves into general register A.
-			-- 09, 00, 00	[4800]
+			-- 09, 00, 00	[900]
 		-- MVADH:	0x22	IMM	(IMM)			[16 bit]
 		-- MVADL:	0x23	IMM	(IMM)			[16 bit]
 		-- MVMR:	0x24	rA	(dst)			[12 bit?]
